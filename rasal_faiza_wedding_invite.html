@@ -1,0 +1,150 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,500&family=Jost:wght@300;400;500&display=swap');
+
+  #wi-root { font-family:'Jost',sans-serif; min-height:520px; display:flex; align-items:center; justify-content:center; padding:2rem 1rem; }
+
+  .wi-screen { display:none; width:100%; max-width:520px; margin:0 auto; flex-direction:column; align-items:center; text-align:center; }
+  .wi-screen.active { display:flex; }
+
+  /* ── SCREEN 1 : tap to open ── */
+  #s1 { gap:28px; }
+  .envelope-wrap { position:relative; cursor:pointer; width:200px; height:155px; user-select:none; }
+  .env-body { width:200px; height:130px; background:#f4ede2; border:1.5px solid #c9a96e; border-radius:4px; position:absolute; bottom:0; left:0; overflow:hidden; }
+  .env-flap { position:absolute; top:0; left:0; width:0; height:0; border-left:100px solid transparent; border-right:100px solid transparent; border-top:68px solid #e8d8be; z-index:2; transition:transform .5s cubic-bezier(.4,0,.2,1); transform-origin:top center; }
+  .env-line-l { position:absolute; bottom:0; left:0; width:0; height:0; border-bottom:130px solid #ddd0b8; border-right:100px solid transparent; }
+  .env-line-r { position:absolute; bottom:0; right:0; width:0; height:0; border-bottom:130px solid #cec0a8; border-left:100px solid transparent; }
+  .env-seal { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:36px; height:36px; border-radius:50%; background:#c9a96e; display:flex; align-items:center; justify-content:center; z-index:3; transition:opacity .3s; }
+  .env-seal span { color:#fff; font-size:14px; font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; line-height:1; }
+  .envelope-wrap:hover .env-flap { transform:rotateX(180deg); }
+  .envelope-wrap:hover .env-seal { opacity:0; }
+  .s1-hint { font-size:13px; color:var(--color-text-secondary); letter-spacing:.15em; text-transform:uppercase; }
+  .s1-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-style:italic; font-weight:300; color:var(--color-text-primary); }
+
+  /* ── SCREEN 2 : countdown ── */
+  #s2 { gap:24px; }
+  .s2-eyebrow { font-size:11px; letter-spacing:.35em; text-transform:uppercase; color:#c9a96e; }
+  .s2-heading { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:var(--color-text-primary); line-height:1.15; }
+  .s2-heading em { font-style:italic; color:#c9a96e; }
+  .s2-date { font-size:13px; letter-spacing:.2em; color:var(--color-text-secondary); }
+  .cd-grid { display:flex; gap:16px; justify-content:center; margin:8px 0; }
+  .cd-box { display:flex; flex-direction:column; align-items:center; gap:6px; background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:12px; padding:16px 20px; min-width:72px; }
+  .cd-num { font-family:'Cormorant Garamond',serif; font-size:44px; font-weight:300; color:var(--color-text-primary); line-height:1; }
+  .cd-label { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--color-text-secondary); }
+  .cd-sep { font-family:'Cormorant Garamond',serif; font-size:32px; color:#c9a96e; align-self:flex-start; margin-top:16px; opacity:.5; }
+  .btn-reveal { margin-top:8px; padding:13px 36px; background:#c9a96e; color:#fff; border:none; border-radius:4px; font-family:'Jost',sans-serif; font-size:13px; letter-spacing:.2em; text-transform:uppercase; cursor:pointer; transition:opacity .2s; }
+  .btn-reveal:hover { opacity:.85; }
+
+  /* ── SCREEN 3 : invitation ── */
+  #s3 { gap:0; animation:fadeUp .7s ease both; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .inv-card { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:16px; padding:44px 36px; width:100%; position:relative; overflow:hidden; }
+  .inv-card::before { content:''; position:absolute; top:-40px; right:-40px; width:160px; height:160px; border-radius:50%; background:#c9a96e; opacity:.06; pointer-events:none; }
+  .inv-card::after { content:''; position:absolute; bottom:-60px; left:-40px; width:200px; height:200px; border-radius:50%; background:#c9a96e; opacity:.04; pointer-events:none; }
+  .inv-eyebrow { font-size:10px; letter-spacing:.4em; text-transform:uppercase; color:#c9a96e; margin-bottom:20px; }
+  .inv-tag { font-family:'Cormorant Garamond',serif; font-size:15px; font-style:italic; color:var(--color-text-secondary); margin-bottom:8px; }
+  .inv-names { font-family:'Cormorant Garamond',serif; font-size:52px; font-weight:300; color:var(--color-text-primary); line-height:1.05; margin:4px 0; }
+  .inv-names .and { display:block; font-style:italic; font-size:.65em; color:#c9a96e; margin:2px 0; }
+  .inv-divider { width:48px; height:1px; background:#c9a96e; opacity:.5; margin:20px auto; }
+  .inv-body { font-family:'Cormorant Garamond',serif; font-size:17px; font-style:italic; font-weight:300; color:var(--color-text-secondary); line-height:1.8; margin-bottom:24px; }
+  .inv-details { display:flex; flex-direction:column; gap:12px; text-align:left; border-top:0.5px solid var(--color-border-tertiary); padding-top:20px; }
+  .inv-detail-row { display:flex; gap:14px; align-items:flex-start; }
+  .inv-icon { width:32px; height:32px; border-radius:50%; border:0.5px solid #c9a96e; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .inv-icon i { font-size:15px; color:#c9a96e; }
+  .inv-detail-text { display:flex; flex-direction:column; gap:1px; }
+  .inv-detail-label { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#c9a96e; }
+  .inv-detail-value { font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--color-text-primary); }
+  .inv-footer { margin-top:28px; font-size:12px; letter-spacing:.1em; color:var(--color-text-secondary); }
+</style>
+
+<div id="wi-root">
+
+  <!-- Screen 1: Envelope -->
+  <div class="wi-screen active" id="s1">
+    <p class="s1-hint">You have received an invitation</p>
+    <div class="envelope-wrap" onclick="openInvite()" title="Click to open">
+      <div class="env-body">
+        <div class="env-line-l"></div>
+        <div class="env-line-r"></div>
+      </div>
+      <div class="env-flap"></div>
+      <div class="env-seal"><span>R&nbsp;F</span></div>
+    </div>
+    <p class="s1-title">Click to open your invitation</p>
+  </div>
+
+  <!-- Screen 2: Countdown -->
+  <div class="wi-screen" id="s2">
+    <p class="s2-eyebrow">The big day is coming</p>
+    <p class="s2-heading">Counting down to<br><em>July 12, 2026</em></p>
+    <p class="s2-date">Saturday · 2026</p>
+    <div class="cd-grid">
+      <div class="cd-box"><span class="cd-num" id="cd-d">--</span><span class="cd-label">Days</span></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-box"><span class="cd-num" id="cd-h">--</span><span class="cd-label">Hours</span></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-box"><span class="cd-num" id="cd-m">--</span><span class="cd-label">Minutes</span></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-box"><span class="cd-num" id="cd-s">--</span><span class="cd-label">Seconds</span></div>
+    </div>
+    <button class="btn-reveal" onclick="showInvitation()">Click to see more ✦</button>
+  </div>
+
+  <!-- Screen 3: Full Invitation -->
+  <div class="wi-screen" id="s3">
+    <div class="inv-card">
+      <p class="inv-eyebrow">Wedding Invitation</p>
+      <p class="inv-tag">Together with their families</p>
+      <div class="inv-names">
+        Rasal
+        <span class="and">&amp;</span>
+        Faiza
+      </div>
+      <div class="inv-divider"></div>
+      <p class="inv-body">joyfully invite you to<br>celebrate their wedding day</p>
+      <div class="inv-details">
+        <div class="inv-detail-row">
+          <div class="inv-icon"><i class="ti ti-calendar" aria-hidden="true"></i></div>
+          <div class="inv-detail-text">
+            <span class="inv-detail-label">Date</span>
+            <span class="inv-detail-value">Sunday, July 12, 2026</span>
+          </div>
+        </div>
+        <div class="inv-detail-row">
+          <div class="inv-icon"><i class="ti ti-clock" aria-hidden="true"></i></div>
+          <div class="inv-detail-text">
+            <span class="inv-detail-label">Nikkah</span>
+            <span class="inv-detail-value">11:30 AM — Celebration begins</span>
+          </div>
+        </div>
+        <div class="inv-detail-row">
+          <div class="inv-icon"><i class="ti ti-map-pin" aria-hidden="true"></i></div>
+          <div class="inv-detail-text">
+            <span class="inv-detail-label">Venue</span>
+            <span class="inv-detail-value">IMJ Hall </span>
+          </div>
+        </div>
+      </div>
+      <p class="inv-footer">We cannot wait to celebrate with you · Rasal &amp; Faiza</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    var t = new Date('2026-07-12T18:00:00') - new Date();
+    if(t<=0){ document.getElementById('cd-d').textContent=document.getElementById('cd-h').textContent=document.getElementById('cd-m').textContent=document.getElementById('cd-s').textContent='00'; return; }
+    document.getElementById('cd-d').textContent = pad(Math.floor(t/86400000));
+    document.getElementById('cd-h').textContent = pad(Math.floor(t%86400000/3600000));
+    document.getElementById('cd-m').textContent = pad(Math.floor(t%3600000/60000));
+    document.getElementById('cd-s').textContent = pad(Math.floor(t%60000/1000));
+  }
+  function show(id){
+    document.querySelectorAll('.wi-screen').forEach(function(el){ el.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+  }
+  function openInvite(){ show('s2'); tick(); setInterval(tick,1000); }
+  function showInvitation(){ show('s3'); }
+</script>
